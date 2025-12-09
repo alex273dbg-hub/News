@@ -4,24 +4,46 @@ import styles from "./styles.module.css";
 import { getNews } from "../../api/apiNews.js";
 import NewsList from "../../componets/NewsList/NewsList.jsx";
 import Skeleton from "../../componets/Skeleton/Skeleton.jsx";
+import Pagination from "../../componets/Pagination/Pagination.jsx";
 
 export default function Main() {
   const [news, setNews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;
+  const pageSize = 10;
+
+  const fetchNews = async (currentPage) => {
+    try {
+      setIsLoading(true);
+      const response = await getNews(currentPage, pageSize);
+      setNews(response.news);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getNews();
-        setNews(response.news);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchNews();
-  }, []);
+    fetchNews(currentPage);
+  }, [currentPage]);
+
+  function heandleNextPage() {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function heandlePageClick(pageNumber) {
+    setCurrentPage(pageNumber);
+  }
+
+  function heandlePrevPage() {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
   return (
     <main className={styles.main}>
       {news.length > 0 && !isLoading ? (
@@ -29,11 +51,28 @@ export default function Main() {
       ) : (
         <Skeleton count={1} type={"banner"} />
       )}
+
+      <Pagination
+        totalPages={totalPages}
+        heandleNextPage={heandleNextPage}
+        heandlePageClick={heandlePageClick}
+        heandlePrevPage={heandlePrevPage}
+        currentPage={currentPage}
+      />
+
       {!isLoading ? (
         <NewsList news={news} />
       ) : (
         <Skeleton count={10} type={"item"} />
       )}
+
+      <Pagination
+        totalPages={totalPages}
+        heandleNextPage={heandleNextPage}
+        heandlePageClick={heandlePageClick}
+        heandlePrevPage={heandlePrevPage}
+        currentPage={currentPage}
+      />
     </main>
   );
 }
