@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 
 export default function Search({ keywords, setKeywords }) {
   return (
-    <div>
+    <div className={styles.search}>
       <input
         type="text"
         value={keywords}
