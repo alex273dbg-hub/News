@@ -1,110 +1,85 @@
-import { useEffect, useState } from "react";
 import NewsBanner from "../../componets/NewsBasnner/NewsBanner";
 import styles from "./styles.module.css";
 import { getNews, getCategories } from "../../api/apiNews.js";
 import NewsList from "../../componets/NewsList/NewsList.jsx";
-import Skeleton from "../../componets/Skeleton/Skeleton.jsx";
 import Pagination from "../../componets/Pagination/Pagination.jsx";
 import Categories from "../../componets/Categories/Categories.jsx";
 import Search from "../../componets/Search/Search.jsx";
 import { useDebounce } from "../../helpers/hooks/useDebounce.js";
+import { TOTAL_PAGES, PAGE_SIZE } from "../../constants/constants.js";
+import { useFetch } from "../../helpers/hooks/useFetch.js";
+import { useFilter } from "../../helpers/hooks/useFilter.js";
 
 export default function Main() {
-  const [news, setNews] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [keywords, setKeywords] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategories, setSelectedCategories] = useState("All");
-  const totalPages = 10;
-  const pageSize = 10;
-  const debouncedKeywords = useDebounce(keywords, 1500);
+  const { filter, chengeFilter } = useFilter({
+    page_number: 1,
+    page_size: PAGE_SIZE,
+    category: null,
+    keywords: "",
+  });
 
-  const fetchNews = async (currentPage) => {
-    try {
-      setIsLoading(true);
-      const response = await getNews({
-        page_number: currentPage,
-        page_size: pageSize,
-        category: selectedCategories === "All" ? null : selectedCategories,
-        keywords: debouncedKeywords,
-      });
-      setNews(response.news);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const debouncedKeywords = useDebounce(filter.keywords, 1500);
+  const { data, isLoading } = useFetch(getNews, {
+    ...filter,
+    keywords: debouncedKeywords,
+  });
 
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategories();
-      setCategories(["All", ...response.categories]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchNews(currentPage);
-  }, [currentPage, selectedCategories, debouncedKeywords]);
+  const { data: dataCategories } = useFetch(getCategories);
 
   function heandleNextPage() {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+    if (filter.page_number < TOTAL_PAGES) {
+      chengeFilter("page_number", filter.page_number + 1);
     }
   }
 
   function heandlePageClick(pageNumber) {
-    setCurrentPage(pageNumber);
+    chengeFilter("page_number", pageNumber);
   }
 
   function heandlePrevPage() {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+    if (filter.page_number > 1) {
+      chengeFilter("page_number", filter.page_number - 1);
     }
   }
 
   return (
     <main className={styles.main}>
-      <Categories
-        categories={categories}
-        selectedCategories={selectedCategories}
-        setSelectedCategories={setSelectedCategories}
+      {dataCategories ? (
+        <Categories
+          categories={dataCategories.categories}
+          selectedCategories={filter.category}
+          setSelectedCategories={(category) =>
+            chengeFilter("category", category)
+          }
+        />
+      ) : null}
+
+      <Search
+        keywords={filter.keywords}
+        setKeywords={(keywords) => chengeFilter("keywords", keywords)}
       />
 
-      <Search keywords={keywords} setKeywords={setKeywords} />
-
-      {news.length > 0 && !isLoading ? (
-        <NewsBanner item={news[0]} />
-      ) : (
-        <Skeleton count={1} type={"banner"} />
-      )}
+      <NewsBanner
+        item={data && data.news && data.news[0]}
+        isLoading={isLoading}
+      />
 
       <Pagination
-        totalPages={totalPages}
+        totalPages={TOTAL_PAGES}
         heandleNextPage={heandleNextPage}
         heandlePageClick={heandlePageClick}
         heandlePrevPage={heandlePrevPage}
-        currentPage={currentPage}
+        currentPage={filter.page_number}
       />
 
-      {!isLoading ? (
-        <NewsList news={news} />
-      ) : (
-        <Skeleton count={10} type={"item"} />
-      )}
+      <NewsList news={data?.news} isLoading={isLoading} />
 
       <Pagination
-        totalPages={totalPages}
+        totalPages={TOTAL_PAGES}
         heandleNextPage={heandleNextPage}
         heandlePageClick={heandlePageClick}
         heandlePrevPage={heandlePrevPage}
-        currentPage={currentPage}
+        currentPage={filter.page_number}
       />
     </main>
   );
