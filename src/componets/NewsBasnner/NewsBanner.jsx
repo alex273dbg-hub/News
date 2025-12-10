@@ -1,8 +1,9 @@
 import { formateTime } from "../../helpers/formateTime";
+import withSkeleton from "../../helpers/hock/withSkeleton";
 import Image from "../Image/Image";
 import styles from "./styles.module.css";
 
-export default function NewsBanner({ item }) {
+function NewsBanner({ item }) {
   return (
     <div className={styles.banner}>
       <Image image={item?.image} />
@@ -13,3 +14,7 @@ export default function NewsBanner({ item }) {
     </div>
   );
 }
+
+const NewsBannerWithSkeleton = withSkeleton(NewsBanner, "banner", 1);
+
+export default NewsBannerWithSkeleton;
