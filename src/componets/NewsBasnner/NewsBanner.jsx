@@ -1,5 +1,4 @@
 import { formateTime } from "../../helpers/formateTime";
-import withSkeleton from "../../helpers/hock/withSkeleton";
 import Image from "../Image/Image";
 import styles from "./styles.module.css";
 
@@ -15,6 +14,4 @@ function NewsBanner({ item }) {
   );
 }
 
-const NewsBannerWithSkeleton = withSkeleton(NewsBanner, "banner", 1);
-
-export default NewsBannerWithSkeleton;
+export default NewsBanner;
