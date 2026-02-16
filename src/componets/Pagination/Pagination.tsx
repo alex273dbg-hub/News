@@ -1,4 +1,4 @@
-import { formatDate } from "../../helpers/formatDate";
+import type { IpaginationProps } from "../../interface";
 import styles from "./styles.module.css";
 
 export default function Pagination({
@@ -7,7 +7,7 @@ export default function Pagination({
   heandlePageClick,
   heandlePrevPage,
   currentPage,
-}) {
+}: IpaginationProps) {
   return (
     <div className={styles.pagination}>
       <button

@@ -1,8 +1,12 @@
 import { formateTime } from "../../helpers/formateTime";
-import Image from "../Image/Image";
+import type { INews } from "../../interface";
 import styles from "./styles.module.css";
 
-export default function NewsItem({ item }) {
+interface Props {
+  item: INews;
+}
+
+export default function NewsItem({ item }: Props) {
   return (
     <li className={styles.item}>
       <div

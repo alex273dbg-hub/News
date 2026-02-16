@@ -1,4 +1,4 @@
-export function formateTime(dateStr) {
+export function formateTime(dateStr: string) {
   const now = new Date();
   const date = new Date(dateStr);
   const secondPast = (now.getTime() - date.getTime()) / 1000;

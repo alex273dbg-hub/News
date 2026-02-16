@@ -1,4 +1,4 @@
-import Header from "./componets/Header/Header.jsx";
+import Header from "./componets/Header/Header";
 import Main from "./pages/Main/Main";
 
 function App() {
