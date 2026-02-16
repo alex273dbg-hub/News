@@ -1,8 +1,13 @@
 import { formateTime } from "../../helpers/formateTime";
+import type { INews } from "../../interface";
 import Image from "../Image/Image";
 import styles from "./styles.module.css";
 
-function NewsBanner({ item }) {
+interface Props {
+  item: INews;
+}
+
+function NewsBanner({ item }: Props) {
   return (
     <div className={styles.banner}>
       <Image image={item?.image} />

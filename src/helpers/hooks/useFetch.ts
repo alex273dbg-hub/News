@@ -1,9 +1,22 @@
 import { useEffect, useState } from "react";
 
-export function useFetch(fetchFunction, params) {
-  const [data, setData] = useState(null);
+interface FetchFunction<P, T> {
+  (params?: P): Promise<T>;
+}
+
+interface UseFetchResult<T> {
+  data: T | null | undefined;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export const useFetch = <T, P>(
+  fetchFunction: FetchFunction<P, T>,
+  params?: P,
+): UseFetchResult<T> => {
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const strParams = params ? new URLSearchParams(params).toString() : "";
 
@@ -15,7 +28,7 @@ export function useFetch(fetchFunction, params) {
 
         setData(result);
       } catch (error) {
-        setError(error);
+        setError(error as Error);
       } finally {
         setIsLoading(false);
       }
@@ -23,4 +36,4 @@ export function useFetch(fetchFunction, params) {
   }, [fetchFunction, strParams]);
 
   return { data, isLoading, error };
-}
+};

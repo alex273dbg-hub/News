@@ -3,6 +3,7 @@ import { PAGE_SIZE, TOTAL_PAGES } from "../../constants/constants";
 import { useDebounce } from "../../helpers/hooks/useDebounce";
 import { useFetch } from "../../helpers/hooks/useFetch";
 import { useFilter } from "../../helpers/hooks/useFilter";
+import type { NewsApiResponse, ParamsType } from "../../interface";
 import NewsFilters from "../NewsFilters/NewsFilters";
 import NewsList from "../NewsList/NewsList";
 import PaginationWrtapper from "../PaginationWrtapper/PaginationWrtapper";
@@ -18,7 +19,7 @@ export default function NewsByFilters() {
 
   const debouncedKeywords = useDebounce(filter.keywords, 1500);
 
-  const { data, isLoading } = useFetch(getNews, {
+  const { data, isLoading } = useFetch<NewsApiResponse, ParamsType>(getNews, {
     ...filter,
     keywords: debouncedKeywords,
   });
@@ -29,7 +30,7 @@ export default function NewsByFilters() {
     }
   }
 
-  function heandlePageClick(pageNumber) {
+  function heandlePageClick(pageNumber: number) {
     chengeFilter("page_number", pageNumber);
   }
 

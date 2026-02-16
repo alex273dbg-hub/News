@@ -1,6 +1,10 @@
 import styles from "./styles.module.css";
 
-export default function Image({ image }) {
+interface Props {
+  image: string;
+}
+
+export default function Image({ image }: Props) {
   return (
     <div className={styles.wrapper}>
       {image ? <img src={image} alt="news" className={styles.img} /> : null}
