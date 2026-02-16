@@ -1,8 +1,8 @@
 import styles from "./styles.module.css";
-import LatestNews from "../../componets/LatestNews/LatestNews";
-import NewsByFilters from "../../componets/NewsByFilters/NewsByFilters";
+import LatestNews from "../../components/LatestNews/LatestNews";
+import NewsByFilters from "../../components/NewsByFilters/NewsByFilters";
 
-export default function Main() {
+const Main = () => {
   return (
     <main className={styles.main}>
       <LatestNews />
@@ -10,4 +10,6 @@ export default function Main() {
       <NewsByFilters />
     </main>
   );
-}
+};
+
+export default Main;
