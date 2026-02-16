@@ -1,13 +1,16 @@
-const BASE_URL = import.meta.env.VITE_NEWS_BASE_API_URL;
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 import axios from "axios";
-import type {
+import {
   CategoriesApiResponse,
   NewsApiResponse,
   ParamsType,
-} from "../interface";
+} from "../interfaces";
 
-export async function getNews(params?: ParamsType): Promise<NewsApiResponse> {
+const BASE_URL = import.meta.env.VITE_NEWS_BASE_API_URL;
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
+
+export const getNews = async (
+  params?: ParamsType
+): Promise<NewsApiResponse> => {
   try {
     const {
       page_number = 1,
@@ -29,9 +32,9 @@ export async function getNews(params?: ParamsType): Promise<NewsApiResponse> {
     console.log(error);
     return { news: [], page: 1, status: "error" };
   }
-}
+};
 
-export async function getLatestNews(): Promise<NewsApiResponse> {
+export const getLatestNews = async (): Promise<NewsApiResponse> => {
   try {
     const response = await axios.get<NewsApiResponse>(
       `${BASE_URL}latest-news`,
@@ -39,16 +42,16 @@ export async function getLatestNews(): Promise<NewsApiResponse> {
         params: {
           apiKey: API_KEY,
         },
-      },
+      }
     );
     return response.data;
   } catch (error) {
     console.log(error);
     return { news: [], page: 1, status: "error" };
   }
-}
+};
 
-export async function getCategories(): Promise<CategoriesApiResponse> {
+export const getCategories = async (): Promise<CategoriesApiResponse> => {
   try {
     const response = await axios.get<CategoriesApiResponse>(
       `${BASE_URL}available/categories`,
@@ -56,11 +59,11 @@ export async function getCategories(): Promise<CategoriesApiResponse> {
         params: {
           apiKey: API_KEY,
         },
-      },
+      }
     );
     return response.data;
   } catch (error) {
     console.log(error);
     return { categories: [], description: "", status: "error" };
   }
-}
+};

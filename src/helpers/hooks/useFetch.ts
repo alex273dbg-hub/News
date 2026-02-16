@@ -12,13 +12,13 @@ interface UseFetchResult<T> {
 
 export const useFetch = <T, P>(
   fetchFunction: FetchFunction<P, T>,
-  params?: P,
+  params?: P
 ): UseFetchResult<T> => {
   const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const strParams = params ? new URLSearchParams(params).toString() : "";
+  const stringParams = params ? new URLSearchParams(params).toString() : "";
 
   useEffect(() => {
     (async () => {
@@ -33,7 +33,7 @@ export const useFetch = <T, P>(
         setIsLoading(false);
       }
     })();
-  }, [fetchFunction, strParams]);
+  }, [fetchFunction, stringParams]);
 
   return { data, isLoading, error };
 };
