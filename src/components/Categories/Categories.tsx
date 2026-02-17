@@ -1,6 +1,6 @@
-import { ForwardedRef, forwardRef } from "react";
+import { type ForwardedRef, forwardRef } from "react";
 import styles from "./styles.module.css";
-import { CategoriesType } from "../../interfaces";
+import type { CategoriesType } from "../../interfaces";
 
 interface Props {
   categories: CategoriesType[];
@@ -11,7 +11,7 @@ interface Props {
 const Categories = forwardRef(
   (
     { categories, setSelectedCategory, selectedCategory }: Props,
-    ref: ForwardedRef<HTMLDivElement>
+    ref: ForwardedRef<HTMLDivElement>,
   ) => {
     return (
       <div ref={ref} className={styles.categories}>
@@ -36,7 +36,7 @@ const Categories = forwardRef(
         })}
       </div>
     );
-  }
+  },
 );
 
 Categories.displayName = "Categories";
