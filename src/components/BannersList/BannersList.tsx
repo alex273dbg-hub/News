@@ -1,5 +1,5 @@
 import withSkeleton from "../../helpers/hocs/withSkeleton";
-import { INews } from "../../interfaces";
+import type { INews } from "../../interfaces";
 import NewsBanner from "../NewsBanner/NewsBanner";
 import styles from "./styles.module.css";
 
@@ -21,7 +21,7 @@ const BannersListWithSkeleton = withSkeleton<Props>(
   BannersList,
   "banner",
   10,
-  "row"
+  "row",
 );
 
 export default BannersListWithSkeleton;

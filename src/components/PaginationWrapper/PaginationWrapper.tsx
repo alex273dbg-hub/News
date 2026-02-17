@@ -1,4 +1,4 @@
-import { IPaginationProps } from "../../interfaces";
+import type { IPaginationProps } from "../../interfaces";
 import Pagination from "../Pagination/Pagination";
 
 interface Props {
