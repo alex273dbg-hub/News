@@ -1,4 +1,4 @@
-import { DirectionType, SkeletonType } from "../../interfaces";
+import { type DirectionType, type SkeletonType } from "../../interfaces";
 import styles from "./styles.module.css";
 
 interface Props {
